@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Duck Drop Admin</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f0f0f0; }
+    button { margin-right: 10px; padding: 10px 15px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<h1>Duck Registration Admin</h1>
+<div>
+  <button onclick="goBack()">⬅️ Back to Duck Picker</button>
+  <button onclick="confirmClearCache()">🗑️ Clear Cache</button>
+  <button onclick="exportToCSV()">📁 Export to Excel</button>
+</div>
+
+<table id="regTable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>Duck #</th>
+      <th>Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Filled by JS -->
+  </tbody>
+</table>
+
+<script>
+  const tableBody = document.querySelector("#regTable tbody");
+  const registrations = JSON.parse(localStorage.getItem("registrations") || "[]");
+
+  function renderTable() {
+    tableBody.innerHTML = "";
+    registrations.forEach(reg => {
+      reg.ducks.forEach(duck => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${reg.name}</td>
+          <td>${reg.phone}</td>
+          <td>${duck}</td>
+          <td>${new Date(reg.timestamp).toLocaleString()}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    });
+  }
+
+  function confirmClearCache() {
+    const pw = prompt("Enter password to clear cache:");
+    if (pw === "fcw2025") {
+      if (confirm("Are you sure you want to clear all registrations and unlock all ducks?")) {
+        localStorage.removeItem("registrations");
+        localStorage.removeItem("lockedDucks");
+        localStorage.removeItem("selectedDucks");
+        location.reload();
+      }
+    } else {
+      alert("Incorrect password.");
+    }
+  }
+
+  function exportToCSV() {
+    const rows = [["Name", "Phone", "Duck", "Timestamp"]];
+    registrations.forEach(r => {
+      r.ducks.forEach(d => {
+        rows.push([r.name, r.phone, d, r.timestamp]);
+      });
+    });
+
+    let csvContent = "data:text/csv;charset=utf-8," 
+      + rows.map(e => e.map(val => `"${val}"`).join(",")).join("\n");
+
+    const link = document.createElement("a");
+    link.setAttribute("href", csvContent);
+    link.setAttribute("download", "duck_registrations.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function goBack() {
+    window.location.href = "index.html";
+  }
+
+  renderTable();
+</script>
+
+</body>
+</html>
