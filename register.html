@@ -61,3 +61,29 @@
       formData.append("ducks", JSON.stringify(ducks));
 
       try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbxvdZe0vS2gS2wkgcIwhmraeGHUuY7IfrMFQuHyzpdDlT_P1CIrU_Me7NRp6owNgCcR/exec", {
+          method: "POST",
+          body: formData
+        });
+
+        const responseText = await res.text();
+        if (res.ok && responseText.includes("success")) {
+          alert("Registered successfully!");
+          localStorage.removeItem("selectedDucks");
+          window.location.href = "index.html";
+        } else {
+          alert("Failed to register. Server said: " + responseText);
+        }
+
+      } catch (err) {
+        alert("Submission error: " + err.message);
+      }
+    }
+
+    function cancel() {
+      localStorage.removeItem("selectedDucks");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
