@@ -1,19 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Duck Drop Admin</title>
   <style>
-    body { font-family: Arial; padding: 20px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background: #f0f0f0; }
-    button { margin-right: 10px; padding: 10px 15px; margin-top: 10px; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 15px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+
+    button {
+      font-size: 1rem;
+      padding: 10px 15px;
+      margin: 8px;
+      border: none;
+      border-radius: 6px;
+      background-color: #1976d2;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0d47a1;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #e0e0e0;
+    }
+
+    @media (min-width: 768px) {
+      table {
+        font-size: 1rem;
+      }
+
+      button {
+        font-size: 1.1rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
   </style>
 </head>
 <body>
 
 <h1>Duck Registration Admin</h1>
-<div>
+
+<div style="text-align: center;">
   <button onclick="goBack()">⬅️ Back to Duck Picker</button>
   <button onclick="confirmClearCache()">🗑️ Clear Cache</button>
   <button onclick="exportToCSV()">📁 Export to Excel</button>
@@ -75,7 +132,7 @@
       });
     });
 
-    let csvContent = "data:text/csv;charset=utf-8," 
+    let csvContent = "data:text/csv;charset=utf-8,"
       + rows.map(e => e.map(val => `"${val}"`).join(",")).join("\n");
 
     const link = document.createElement("a");
