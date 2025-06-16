@@ -1,21 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Register Ducks</title>
   <style>
-    body { font-family: Arial; padding: 20px; }
-    label { display: block; margin-top: 10px; }
-    button { margin-top: 15px; margin-right: 10px; padding: 10px 15px; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    #selected-info {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #2e7d32;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-size: 1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 20px;
+      margin-right: 10px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #1976d2;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0d47a1;
+    }
+
+    @media (min-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      input {
+        font-size: 1.1rem;
+      }
+
+      button {
+        font-size: 1.1rem;
+      }
+    }
   </style>
 </head>
 <body>
 
 <h1>Duck Registration</h1>
-<div id="selected-info"></div>
+<div id="selected-info">You selected: </div>
 
 <form onsubmit="submitForm(event)">
-  <label>Name: <input type="text" id="name" required></label>
-  <label>Phone: <input type="text" id="phone" required></label>
+  <label>Name:</label>
+  <input type="text" id="name" required>
+
+  <label>Phone:</label>
+  <input type="text" id="phone" required>
+
   <button type="submit">Submit</button>
   <button type="button" onclick="cancelRegistration()">Cancel</button>
 </form>
@@ -29,7 +98,7 @@
     window.location.href = "index.html";
   }
 
-  document.getElementById("selected-info").innerText = "You selected: " + selectedDucks.join(", ");
+  document.getElementById("selected-info").textContent = "You selected: " + selectedDucks.join(", ");
 
   function submitForm(event) {
     event.preventDefault();
