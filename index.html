@@ -9,13 +9,14 @@
   <h1>Select Your Ducks</h1>
   <div id="duck-grid"></div>
   <button onclick="proceedToRegistration()">Next</button>
+
   <script>
     const TOTAL_DUCKS = 600;
     const selectedDucks = [];
     let lockedDucks = [];
 
     async function fetchLockedDucks() {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbzI0JhUhwtSPKaFqE5JyEsx3occoinJncEK_-YJ4WjuVEqVWbj9ROdxDDsF8aJ-QkcL/exec");
+      const res = await fetch("https://script.google.com/macros/s/AKfycbxvdZe0vS2gS2wkgcIwhmraeGHUuY7IfrMFQuHyzpdDlT_P1CIrU_Me7NRp6owNgCcR/exec");
       const data = await res.json();
       lockedDucks = data.map(Number);
       renderGrid();
@@ -54,7 +55,7 @@
         return;
       }
       localStorage.setItem("selectedDucks", JSON.stringify(selectedDucks));
-      location.href = "register.html";
+      location.href = "register_debug.html";
     }
 
     fetchLockedDucks();
