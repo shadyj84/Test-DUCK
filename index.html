@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Select Your Ducks</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .duck {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      margin: 3px;
+      background: lightblue;
+      text-align: center;
+      line-height: 50px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .selected { background: green; color: white; }
+    .disabled { background: grey; color: white; cursor: not-allowed; }
+    #button-row { margin-top: 20px; }
+    button { padding: 10px 15px; margin-right: 10px; }
+    #counter {
+      font-weight: bold;
+      margin-bottom: 15px;
+      font-size: 32px;
+      color: darkgreen;
+      border: 2px solid darkgreen;
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background-color: #eaffea;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Pick Your Duck(s)</h1>
+<div id="counter">Selected: 0</div>
+<div id="duck-grid"></div>
+
+<div id="button-row">
+  <button onclick="proceedToRegistration()">Next</button>
+  <button onclick="goToAdmin()">Admin</button>
+</div>
+
+<script>
+  const TOTAL_DUCKS = 600;
+  const selectedDucks = [];
+  const lockedDucks = JSON.parse(localStorage.getItem("lockedDucks") || "[]");
+  const grid = document.getElementById("duck-grid");
+  const counter = document.getElementById("counter");
+
+  function renderGrid() {
+    for (let i = 1; i <= TOTAL_DUCKS; i++) {
+      const duck = document.createElement("div");
+      duck.className = "duck";
+      duck.textContent = i;
+      if (lockedDucks.includes(i)) {
+        duck.classList.add("disabled");
+      } else {
+        duck.onclick = () => toggleDuck(i, duck);
+      }
+      grid.appendChild(duck);
+    }
+  }
+
+  function toggleDuck(id, element) {
+    const index = selectedDucks.indexOf(id);
+    if (index >= 0) {
+      selectedDucks.splice(index, 1);
+      element.classList.remove("selected");
+    } else {
+      selectedDucks.push(id);
+      element.classList.add("selected");
+    }
+    updateCounter();
+  }
+
+  function updateCounter() {
+    counter.textContent = `Selected: ${selectedDucks.length}`;
+  }
+
+  function proceedToRegistration() {
+    if (selectedDucks.length === 0) {
+      alert("Please select at least one duck.");
+      return;
+    }
+    localStorage.setItem("selectedDucks", JSON.stringify(selectedDucks));
+    window.location.href = "register.html";
+  }
+
+  function goToAdmin() {
+    const password = prompt("Enter admin password:");
+    if (password === "fcw") {
+      window.location.href = "admin.html";
+    } else {
+      alert("Incorrect password.");
+    }
+  }
+
+  renderGrid();
+  updateCounter();
+</script>
+
+</body>
+</html>
