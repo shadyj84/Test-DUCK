@@ -26,12 +26,14 @@
     button {
       padding: 10px 20px;
       margin-top: 10px;
+      margin-right: 10px;
     }
   </style>
 </head>
 <body>
   <h1>Register Your Ducks</h1>
   <div id="info"></div>
+
   <form onsubmit="submitForm(event)">
     <label>Name: <input id="name" required /></label>
     <label>Phone: <input id="phone" required /></label>
@@ -59,27 +61,3 @@
       formData.append("ducks", JSON.stringify(ducks));
 
       try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbxvdZe0vS2gS2wkgcIwhmraeGHUuY7IfrMFQuHyzpdDlT_P1CIrU_Me7NRp6owNgCcR/exec", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (res.ok) {
-          alert("Registered successfully!");
-          localStorage.removeItem("selectedDucks");
-          location.href = "index.html";
-        } else {
-          alert("Failed to submit registration.");
-        }
-      } catch (err) {
-        alert("Submission error: " + err.message);
-      }
-    }
-
-    function cancel() {
-      localStorage.removeItem("selectedDucks");
-      location.href = "index.html";
-    }
-  </script>
-</body>
-</html>
