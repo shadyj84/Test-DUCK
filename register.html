@@ -1,16 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Register Ducks (Debug)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border: 1px solid #ccc;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  </style>
 </head>
 <body>
   <h1>Register Your Ducks (Debug Mode)</h1>
   <div id="info"></div>
   <form onsubmit="submitForm(event)">
-    <label>Name: <input id="name" required></label><br>
-    <label>Phone: <input id="phone" required></label><br>
+    <label>Name: <input id="name" required /></label>
+    <label>Phone: <input id="phone" required /></label>
     <button type="submit">Submit</button>
     <button type="button" onclick="cancel()">Cancel</button>
   </form>
@@ -29,8 +60,8 @@
 
     async function submitForm(e) {
       e.preventDefault();
-      const name = document.getElementById("name").value;
-      const phone = document.getElementById("phone").value;
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
 
       if (!name || !phone || ducks.length === 0) {
         alert("Please complete the form and select ducks.");
@@ -38,14 +69,17 @@
         return;
       }
 
-      const payload = { name, phone, ducks };
-      log("Sending data: " + JSON.stringify(payload));
+      const formData = new URLSearchParams();
+      formData.append("name", name);
+      formData.append("phone", phone);
+      formData.append("ducks", JSON.stringify(ducks));
+
+      log("Sending data:\n" + formData.toString());
 
       try {
         const res = await fetch("https://script.google.com/macros/s/AKfycbxvdZe0vS2gS2wkgcIwhmraeGHUuY7IfrMFQuHyzpdDlT_P1CIrU_Me7NRp6owNgCcR/exec", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: formData,
         });
 
         log("Fetch status: " + res.status);
