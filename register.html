@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register Ducks</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    label { display: block; margin-top: 10px; }
+    button { margin-top: 15px; margin-right: 10px; padding: 10px 15px; }
+  </style>
+</head>
+<body>
+
+<h1>Duck Registration</h1>
+<div id="selected-info"></div>
+
+<form onsubmit="submitForm(event)">
+  <label>Name: <input type="text" id="name" required></label>
+  <label>Phone: <input type="text" id="phone" required></label>
+  <button type="submit">Submit</button>
+  <button type="button" onclick="cancelRegistration()">Cancel</button>
+</form>
+
+<script>
+  const selectedDucks = JSON.parse(localStorage.getItem("selectedDucks") || "[]");
+  const lockedDucks = JSON.parse(localStorage.getItem("lockedDucks") || "[]");
+
+  if (selectedDucks.length === 0) {
+    alert("No ducks selected. Redirecting...");
+    window.location.href = "index.html";
+  }
+
+  document.getElementById("selected-info").innerText = "You selected: " + selectedDucks.join(", ");
+
+  function submitForm(event) {
+    event.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+
+    if (!name || !phone) {
+      alert("Please complete all fields.");
+      return;
+    }
+
+    const submission = {
+      name,
+      phone,
+      ducks: selectedDucks,
+      timestamp: new Date().toISOString()
+    };
+
+    const registrations = JSON.parse(localStorage.getItem("registrations") || "[]");
+    registrations.push(submission);
+    localStorage.setItem("registrations", JSON.stringify(registrations));
+
+    const updatedLocks = [...new Set([...lockedDucks, ...selectedDucks])];
+    localStorage.setItem("lockedDucks", JSON.stringify(updatedLocks));
+    localStorage.removeItem("selectedDucks");
+
+    alert("Thanks for registering, " + name + "!");
+    window.location.href = "index.html";
+  }
+
+  function cancelRegistration() {
+    if (confirm("Cancel and release selected ducks?")) {
+      localStorage.removeItem("selectedDucks");
+      window.location.href = "index.html";
+    }
+  }
+</script>
+
+</body>
+</html>
