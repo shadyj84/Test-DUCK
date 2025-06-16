@@ -15,7 +15,7 @@
     let lockedDucks = [];
 
     async function fetchLockedDucks() {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbwmRmOVnLqTDj7OX7MnapOOZYPH1EQKko9kzuAV1GemSA3TD7IRkFbAjsyDimEshWMM/exec");
+      const res = await fetch("https://script.google.com/macros/s/AKfycbzI0JhUhwtSPKaFqE5JyEsx3occoinJncEK_-YJ4WjuVEqVWbj9ROdxDDsF8aJ-QkcL/exec");
       const data = await res.json();
       lockedDucks = data.map(Number);
       renderGrid();
