@@ -3,36 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register Ducks</title>
+  <title>Register Ducks (Debug)</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    h1 { text-align: center; }
+    label { display: block; margin-top: 10px; }
+    input { width: 100%; padding: 8px; margin-bottom: 10px; }
+    button { padding: 10px 20px; margin-top: 10px; }
+    pre { background: #f4f4f4; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap; word-wrap: break-word; }
+  </style>
 </head>
 <body>
-  <h1>Register Your Ducks</h1>
+  <h1>Register Your Ducks (Debug Mode)</h1>
   <div id="info"></div>
   <form onsubmit="submitForm(event)">
-    <label>Name: <input id="name" required></label><br>
-    <label>Phone: <input id="phone" required></label><br>
+    <label>Name: <input id="name" required></label>
+    <label>Phone: <input id="phone" required></label>
     <button type="submit">Submit</button>
     <button type="button" onclick="cancel()">Cancel</button>
   </form>
+  <h3>Debug Log</h3>
+  <pre id="debug-log"></pre>
   <script>
     const ducks = JSON.parse(localStorage.getItem("selectedDucks") || "[]");
     document.getElementById("info").innerText = "You selected: " + ducks.join(", ");
+
+    function log(msg) {
+      const logBox = document.getElementById("debug-log");
+      logBox.textContent += msg + "\n";
+    }
 
     async function submitForm(e) {
       e.preventDefault();
       const name = document.getElementById("name").value;
       const phone = document.getElementById("phone").value;
-      const res = await fetch("https://script.google.com/macros/s/AKfycbzI0JhUhwtSPKaFqE5JyEsx3occoinJncEK_-YJ4WjuVEqVWbj9ROdxDDsF8aJ-QkcL/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, ducks })
-      });
-      if (res.ok) {
-        alert("Registered successfully!");
-        localStorage.removeItem("selectedDucks");
-        location.href = "index.html";
-      } else {
-        alert("Failed to register.");
+
+      if (!name || !phone || ducks.length === 0) {
+        alert("Please complete the form and select ducks.");
+        log("Form validation failed.");
+        return;
+      }
+
+      const payload = { name, phone, ducks };
+      log("Sending data: " + JSON.stringify(payload));
+
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbzI0JhUhwtSPKaFqE5JyEsx3occoinJncEK_-YJ4WjuVEqVWbj9ROdxDDsF8aJ-QkcL/exec", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        log("Fetch status: " + res.status);
+        const responseText = await res.text();
+        log("Response: " + responseText);
+
+        if (res.ok) {
+          alert("Registered successfully!");
+          localStorage.removeItem("selectedDucks");
+          location.href = "index.html";
+        } else {
+          alert("Failed to submit.");
+        }
+      } catch (err) {
+        log("Fetch error: " + err);
+        alert("Submission error: " + err.message);
       }
     }
 
