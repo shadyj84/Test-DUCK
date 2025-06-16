@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register Ducks (Debug)</title>
+  <title>Register Ducks</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -27,17 +27,10 @@
       padding: 10px 20px;
       margin-top: 10px;
     }
-    pre {
-      background: #f4f4f4;
-      padding: 10px;
-      border: 1px solid #ccc;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
   </style>
 </head>
 <body>
-  <h1>Register Your Ducks (Debug Mode)</h1>
+  <h1>Register Your Ducks</h1>
   <div id="info"></div>
   <form onsubmit="submitForm(event)">
     <label>Name: <input id="name" required /></label>
@@ -46,17 +39,9 @@
     <button type="button" onclick="cancel()">Cancel</button>
   </form>
 
-  <h3>Debug Log</h3>
-  <pre id="debug-log"></pre>
-
   <script>
     const ducks = JSON.parse(localStorage.getItem("selectedDucks") || "[]");
     document.getElementById("info").innerText = "You selected: " + ducks.join(", ");
-
-    function log(msg) {
-      const logBox = document.getElementById("debug-log");
-      logBox.textContent += msg + "\n";
-    }
 
     async function submitForm(e) {
       e.preventDefault();
@@ -65,7 +50,6 @@
 
       if (!name || !phone || ducks.length === 0) {
         alert("Please complete the form and select ducks.");
-        log("Form validation failed.");
         return;
       }
 
@@ -74,27 +58,20 @@
       formData.append("phone", phone);
       formData.append("ducks", JSON.stringify(ducks));
 
-      log("Sending data:\n" + formData.toString());
-
       try {
         const res = await fetch("https://script.google.com/macros/s/AKfycbxvdZe0vS2gS2wkgcIwhmraeGHUuY7IfrMFQuHyzpdDlT_P1CIrU_Me7NRp6owNgCcR/exec", {
           method: "POST",
           body: formData,
         });
 
-        log("Fetch status: " + res.status);
-        const responseText = await res.text();
-        log("Response: " + responseText);
-
         if (res.ok) {
           alert("Registered successfully!");
           localStorage.removeItem("selectedDucks");
           location.href = "index.html";
         } else {
-          alert("Failed to submit.");
+          alert("Failed to submit registration.");
         }
       } catch (err) {
-        log("Fetch error: " + err);
         alert("Submission error: " + err.message);
       }
     }
