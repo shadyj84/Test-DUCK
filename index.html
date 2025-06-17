@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Duck Selector</title>
+  <style>
+    body { font-family: Arial; text-align: center; }
+    .ducks { display: flex; flex-wrap: wrap; justify-content: center; }
+    .duck { border: 1px solid #ccc; margin: 5px; padding: 10px; width: 50px; cursor: pointer; }
+    .selected { background: yellow; }
+    #count { position: fixed; top: 10px; left: 10px; background: #fff; padding: 10px; font-size: 20px; border: 2px solid black; }
+  </style>
+</head>
+<body>
+  <div id="count">Selected: 0</div>
+  <h1>Select Your Ducks</h1>
+  <div class="ducks" id="duckContainer"></div>
+  <button onclick="goRegister()">Next</button>
+
+  <script>
+    const duckContainer = document.getElementById("duckContainer");
+    const selected = new Set();
+    for (let i = 1; i <= 600; i++) {
+      const div = document.createElement("div");
+      div.textContent = i;
+      div.className = "duck";
+      div.onclick = () => {
+        if (div.classList.toggle("selected")) {
+          selected.add(i);
+        } else {
+          selected.delete(i);
+        }
+        document.getElementById("count").textContent = "Selected: " + selected.size;
+      };
+      duckContainer.appendChild(div);
+    }
+
+    function goRegister() {
+      if (selected.size === 0) {
+        alert("Please select at least one duck.");
+        return;
+      }
+      localStorage.setItem("selectedDucks", JSON.stringify(Array.from(selected)));
+      window.location.href = "register.html";
+    }
+  </script>
+</body>
+</html>
